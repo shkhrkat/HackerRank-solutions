@@ -1,0 +1,53 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+# Complete the unboundedKnapsack function below.
+def unboundedKnapsack(k, arr):
+    max_sum=k
+    if len(arr) == 0 or max_sum == 0:
+        return 0
+  
+    if max_sum < min(arr):
+        return 0
+  
+    for element in arr:
+        if max_sum % element == 0:
+            return max_sum
+
+  # None of our micro optimizations worked out, time to use dynamic programming
+    cache = [0] * (max_sum + 1)
+    max_found_sum = 0
+    for i in range(1, max_sum + 1):
+        for val in arr:
+      # we have a coin for this value!!
+            if i - val == 0 or i - val > 0 and cache[i - val] == 1:
+                cache[i] = 1
+                max_found_sum = i
+  
+    return max_found_sum
+    
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    t = int(input())
+    for _ in range(t):
+
+        nk = input().split()
+
+        n = int(nk[0])
+
+        k = int(nk[1])
+
+        arr = list(map(int, input().rstrip().split()))
+
+        result = unboundedKnapsack(k, arr)
+
+        fptr.write(str(result) + '\n')
+
+    fptr.close()
